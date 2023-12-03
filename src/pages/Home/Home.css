@@ -1,0 +1,39 @@
+/* Home.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #ffffcc; /* Yellow background color */
+}
+
+.home-container {
+    text-align: center;
+}
+
+.home-title {
+    color: #333;
+    font-size: 7rem; /* Increase font size */
+    margin-bottom: 10px; /* Reduce margin */
+}
+
+.home-text {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.home-link {
+    text-decoration: none;
+    padding: 10px 20px; /* Adjust padding */
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px; /* Round corners */
+    transition: background-color 0.3s;
+}
+
+.home-link:hover {
+    background-color: #45a049;
+}
