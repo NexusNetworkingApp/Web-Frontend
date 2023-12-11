@@ -1,0 +1,56 @@
+/* Header.css */
+
+.header {
+    background-color: #ffffff; /* White background color */
+    padding: 20px 30px; /* Adjusted padding for a more compact header */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #000000; /* Black text color */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow for separation */
+}
+
+.header a {
+    text-decoration: none;
+    color: inherit; /* Inherit color from the parent */
+}
+
+.header h1 {
+    font-size: 36px; /* Slightly reduced font size */
+    font-weight: 400;
+    margin: 0;
+    margin-left: 20px; /* Adjusted margin for better alignment */
+    font-family: 'Baloo', sans-serif;
+}
+
+.header nav {
+    display: flex;
+    gap: 20px;
+}
+
+.header nav a {
+    text-decoration: none;
+    color: #000000; /* Black text color */
+    font-size: 18px; /* Adjusted font size for navigation links */
+    font-weight: 500;
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.header nav a:hover {
+    color: #007bff; /* Change color on hover, you can adjust this to your preference */
+}
+
+.header button {
+    background-color: #007bff; /* Blue color for the logout button */
+    color: #ffffff; /* White text color */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.header button:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+}

@@ -1,6 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './AuthContext';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './pages/Home/Home';
 import Signup from './pages/SignUp/Signup';
 import Login from './pages/Login/Login';
@@ -12,20 +14,47 @@ import Profile from './pages/Profile/Profile';
 import Standouts from './pages/Standouts/Standouts';
 
 function App() {
+    const { isLoggedIn } = useAuth();
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/discover" element={<Discover />} />
-                <Route path="/jobs" element={<Jobs />} />
-                <Route path="/likes" element={<Likes />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/standouts" element={<Standouts />} />
-            </Routes>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <Header />
+                <Routes>
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                        path="/"
+                        element={isLoggedIn ? <Discover /> : <Navigate to="/" />}
+                    />
+                    <Route
+                        path="/chat"
+                        element={isLoggedIn ? <Chat /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/discover"
+                        element={isLoggedIn ? <Discover /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/jobs"
+                        element={isLoggedIn ? <Jobs /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/likes"
+                        element={isLoggedIn ? <Likes /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/profile"
+                        element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/standouts"
+                        element={isLoggedIn ? <Standouts /> : <Navigate to="/login" />}
+                    />
+                </Routes>
+                <Footer />
+            </Router>
+        </AuthProvider>
     );
 }
 

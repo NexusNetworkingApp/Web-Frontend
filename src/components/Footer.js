@@ -1,24 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import './Footer.css';
 
-const Footer = () => {
-    const sections = [
-        { title: 'Discover', link: '/discover' },
-        { title: 'Standouts', link: '/standouts' },
-        { title: 'Likes', link: '/likes' },
-        { title: 'Chat', link: '/chat' },
-        { title: 'Profile', link: '/profile' },
-    ];
-
+function Footer() {
     return (
         <footer>
-            {sections.map((section, index) => (
-                <div key={index}>
-                    <Link to={section.link}>{section.title}</Link>
+            <div className="footer-content">
+                <p>&copy; 2023 <a href="/" className="nexus-link">NEXUS</a>. All rights reserved.</p>
+                <div className="footer-links">
+                    <a href="/terms">Terms of Service</a>
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/contact">Contact</a>
                 </div>
-            ))}
+            </div>
         </footer>
     );
-};
+}
 
 export default Footer;

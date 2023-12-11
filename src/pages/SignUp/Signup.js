@@ -1,7 +1,10 @@
+// Signup.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
+import classnames from 'classnames';
 import { API_URL } from '../../util/URL';
-
+import './Signup.css'; // Import the CSS file
 
 const Signup = () => {
     const [userType, setUserType] = useState('individual');
@@ -15,9 +18,8 @@ const Signup = () => {
         gender: '',
         receiveNotifications: false,
         biography: '',
-        lastActive: new Date().toISOString(), // Assuming lastActive is a timestamp
-        location: 0, // Assuming location is a numerical value
-        // Add other individual fields as needed
+        lastActive: new Date().toISOString(),
+        location: 0,
     });
 
     const [organizationFormData, setOrganizationFormData] = useState({
@@ -28,25 +30,19 @@ const Signup = () => {
         industry: '',
         receiveNotifications: false,
         biography: '',
-        lastActive: new Date().toISOString(), // Assuming lastActive is a timestamp
+        lastActive: new Date().toISOString(),
         verified: false,
-        location: 0, // Assuming location is a numerical value
-        // Add other organization fields as needed
+        location: 0,
     });
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        if (userType === 'individual') {
-            setIndividualFormData((prevData) => ({
-                ...prevData,
-                [name]: type === 'checkbox' ? checked : value,
-            }));
-        } else if (userType === 'organization') {
-            setOrganizationFormData((prevData) => ({
-                ...prevData,
-                [name]: type === 'checkbox' ? checked : value,
-            }));
-        }
+        const formData = userType === 'individual' ? setIndividualFormData : setOrganizationFormData;
+
+        formData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
     };
 
     const handleUserTypeChange = (e) => {
@@ -59,6 +55,7 @@ const Signup = () => {
 
         try {
             let response;
+            console.log(userData);
             if (userType === 'individual') {
                 response = await axios.post(`${API_URL}/account/create-individual`, userData);
             } else if (userType === 'organization') {
@@ -72,40 +69,42 @@ const Signup = () => {
     };
 
     return (
-        <div>
-            <h2>Signup</h2>
+        <div className={classnames('signup-container', { 'organization-mode': userType === 'organization' })}>
+            <h2>Sign Up</h2>
             <label>
-                Select User Type:
+                Account Type:
                 <select value={userType} onChange={handleUserTypeChange}>
                     <option value="individual">Individual</option>
                     <option value="organization">Organization</option>
                 </select>
             </label>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="signup-form">
                 <label>
-                    Email:
+                    Email Address:
                     <input
                         type="email"
                         name="email"
                         value={userType === 'individual' ? individualFormData.email : organizationFormData.email}
                         onChange={handleChange}
+                        required
                     />
                 </label>
-                <br />
+
                 <label>
                     Password:
                     <input
                         type="password"
-                        name="password"
-                        value={userType === 'individual' ? individualFormData.password : organizationFormData.password}
+                        name="passwordHash"
+                        value={userType === 'individual' ? individualFormData.passwordHash : organizationFormData.passwordHash}
                         onChange={handleChange}
+                        minLength="8"
+                        required
                     />
                 </label>
-                {/* Individual-specific fields */}
+
                 {userType === 'individual' && (
                     <>
-                        <br />
                         <label>
                             First Name:
                             <input
@@ -113,9 +112,10 @@ const Signup = () => {
                                 name="firstName"
                                 value={individualFormData.firstName}
                                 onChange={handleChange}
+                                required
                             />
                         </label>
-                        <br />
+
                         <label>
                             Last Name:
                             <input
@@ -123,9 +123,10 @@ const Signup = () => {
                                 name="lastName"
                                 value={individualFormData.lastName}
                                 onChange={handleChange}
+                                required
                             />
                         </label>
-                        <br />
+
                         <label>
                             Date of Birth:
                             <input
@@ -133,9 +134,10 @@ const Signup = () => {
                                 name="dateOfBirth"
                                 value={individualFormData.dateOfBirth}
                                 onChange={handleChange}
+                                required
                             />
                         </label>
-                        <br />
+
                         <label>
                             Gender:
                             <input
@@ -145,7 +147,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Receive Notifications:
                             <input
@@ -155,7 +157,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Biography:
                             <textarea
@@ -164,7 +166,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Location:
                             <input
@@ -177,10 +179,8 @@ const Signup = () => {
                     </>
                 )}
 
-                {/* Organization-specific fields */}
                 {userType === 'organization' && (
                     <>
-                        <br />
                         <label>
                             Organization Name:
                             <input
@@ -188,9 +188,10 @@ const Signup = () => {
                                 name="organizationName"
                                 value={organizationFormData.organizationName}
                                 onChange={handleChange}
+                                required
                             />
                         </label>
-                        <br />
+
                         <label>
                             Founded Date:
                             <input
@@ -198,9 +199,10 @@ const Signup = () => {
                                 name="foundedDate"
                                 value={organizationFormData.foundedDate}
                                 onChange={handleChange}
+                                required
                             />
                         </label>
-                        <br />
+
                         <label>
                             Industry:
                             <input
@@ -210,7 +212,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Receive Notifications:
                             <input
@@ -220,7 +222,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Biography:
                             <textarea
@@ -229,7 +231,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Verified:
                             <input
@@ -239,7 +241,7 @@ const Signup = () => {
                                 onChange={handleChange}
                             />
                         </label>
-                        <br />
+
                         <label>
                             Location:
                             <input
@@ -252,8 +254,7 @@ const Signup = () => {
                     </>
                 )}
 
-                <br />
-                <button type="submit">Signup</button>
+                <button type="submit">Create Account</button>
             </form>
         </div>
     );
