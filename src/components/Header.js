@@ -17,7 +17,7 @@ const Header = () => {
         <>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo" />
             <header className="header">
-                <Link to="/">
+                <Link to="/discover">
                     <h1 className="header-title">NEXUS</h1>
                 </Link>
                 <nav>
