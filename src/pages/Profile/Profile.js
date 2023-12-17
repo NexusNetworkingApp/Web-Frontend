@@ -1,6 +1,7 @@
 import './Profile.css';
 import React, { useEffect, useState } from 'react';
 import Footer from '../../components/Footer';
+import {Link} from "react-router-dom";
 
 const Profile = () => {
     const [account, setAccount] = useState(null);
@@ -46,7 +47,15 @@ const Profile = () => {
                     <p>Biography: {account.organization.biography}</p>
                     <p>verified: {account.organization.verified}</p>
                     <p>Zip Code: {account.organization.location}</p>
-                    {/* Add other organization-specific parameters */}
+
+                    {/* Job Posting Link */}
+                    <div>
+                        <h3>Job Posting</h3>
+                        <p>
+                            Interested in posting a job?{' '}
+                            <Link to="/post-job">Click here</Link> to post a new job.
+                        </p>
+                    </div>
                 </div>
             ) : (
                 // Handle unknown account type or other cases

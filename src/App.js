@@ -12,6 +12,9 @@ import Jobs from './pages/Jobs/Jobs';
 import Likes from './pages/Likes/Likes';
 import Profile from './pages/Profile/Profile';
 import Standouts from './pages/Standouts/Standouts';
+import Message from './pages/Message/Message';
+import JobPosting from './pages/JobPosting/JobPosting';
+import JobApplication from './pages/JobApplication/JobApplication';
 
 function App() {
     const { isLoggedIn } = useAuth();
@@ -51,6 +54,19 @@ function App() {
                         path="/standouts"
                         element={isLoggedIn ? <Standouts /> : <Navigate to="/login" />}
                     />
+                    <Route
+                        path="/message/:accountId/:otherAccountId"
+                        element={isLoggedIn ? <Message /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/post-job"
+                        element={isLoggedIn ? <JobPosting /> : <Navigate to="/login" />}
+                    />
+                    <Route
+                        path="/apply-job/:jobId"
+                        element={isLoggedIn ? <JobApplication /> : <Navigate to="/login" />}
+                    />
+
                 </Routes>
                 <Footer />
             </Router>

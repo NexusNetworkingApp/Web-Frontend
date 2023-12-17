@@ -50,14 +50,16 @@ const Discover = () => {
 
     const handleLike = async () => {
         try {
-
             const likeData = {
                 sender: account,
                 receiver: discoverProfile,
-                prompt: "BIOGRAPHY", // Ensure this matches the enum value on the server side
+                likeDate: new Date(),
+                likeMessage: '',
+                prompt: 'BIOGRAPHY',
+
             };
 
-            console.log(likeData);
+            console.log("Sending like:", likeData);
 
             await axios.post(`${API_URL}/account/create-like`, likeData);
 
@@ -66,9 +68,12 @@ const Discover = () => {
             // You can perform additional actions after a successful like creation
         } catch (error) {
             console.error('Error creating like:', error.message);
+            console.error('Server response:', error.response?.data); // Safely access response data
             // Handle error scenarios
         }
     };
+
+
 
 
     return (
