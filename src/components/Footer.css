@@ -1,10 +1,13 @@
 /* Footer.css */
-
 footer {
-    padding: 20px;
+    padding: 10px 20px;
+    margin: 0;
     text-align: center;
-    border-top: 1px solid grey;
-}
+    background-color: #f1f1f1;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
 
 .footer-content {
     display: flex;

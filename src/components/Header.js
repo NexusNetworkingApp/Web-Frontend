@@ -1,3 +1,4 @@
+// src/components/Header.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -10,7 +11,6 @@ const Header = () => {
         logout();
     };
 
-    // Retrieve account information from local storage
     const account = JSON.parse(localStorage.getItem('account'));
 
     return (
@@ -22,10 +22,8 @@ const Header = () => {
                 </Link>
                 <nav>
                     {isLoggedIn ? (
-                        // If the user is logged in, show a different header based on account type
                         <>
                             {account && account.accountType === 'INDIVIDUAL' ? (
-                                // Render links specific to individual accounts
                                 <>
                                     <Link to="/discover">Discover</Link>
                                     <Link to="/jobs">Jobs</Link>
@@ -34,7 +32,6 @@ const Header = () => {
                                     <Link to="/profile">Profile</Link>
                                 </>
                             ) : account && account.accountType === 'ORGANIZATION' ? (
-                                // Render links specific to organization accounts
                                 <>
                                     <Link to="/discover">Discover</Link>
                                     <Link to="/standouts">Standouts</Link>
@@ -43,14 +40,11 @@ const Header = () => {
                                     <Link to="/profile">Profile</Link>
                                 </>
                             ) : (
-                                // Handle unknown account type or other cases
                                 <p>Unsupported account type</p>
                             )}
-                            {/* Add the sign-out button */}
                             <button onClick={handleLogout}>Sign Out</button>
                         </>
                     ) : (
-                        // If the user is not logged in, show a different header
                         <>
                             <Link to="/login">Login</Link>
                             <Link to="/signup">Signup</Link>

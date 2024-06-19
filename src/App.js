@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home/Home';
-import Signup from './pages/SignUp/Signup';
+import Signup from './pages/SignUp/Signup'; 
 import Login from './pages/Login/Login';
 import Chat from './pages/Chat/Chat';
 import Discover from './pages/Discover/Discover';
