@@ -1,15 +1,17 @@
+// Message.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
 import { useParams } from 'react-router-dom';
-
-// ... (your imports)
+import './Message.css'; // Import the CSS file
 
 const Message = () => {
     const { accountId, otherAccountId } = useParams();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [account, setAccount] = useState(null);
+    const [otherUserName, setOtherUserName] = useState('');
 
     useEffect(() => {
         // Retrieve account information from local storage
@@ -29,6 +31,18 @@ const Message = () => {
     useEffect(() => {
         // Fetch initial messages using RESTful API
         fetchMessages();
+
+        // Fetch the other user's name for the header
+        const fetchOtherUserName = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/account/get-user-name/${otherAccountId}`);
+                setOtherUserName(response.data);
+            } catch (error) {
+                console.error('Error fetching other user name:', error.message);
+            }
+        };
+
+        fetchOtherUserName();
     }, [accountId, otherAccountId]);
 
     const handleSendMessage = async () => {
@@ -48,25 +62,29 @@ const Message = () => {
         setNewMessage('');
     };
 
-
     return (
-        <div>
+        <div className="message-container">
+            {/* Display other user's name as a header */}
+            {otherUserName && (
+                <h2 className="other-user-header">{otherUserName}</h2>
+            )}
+
             {/* Render messages */}
-            <ul>
+            <ul className="message-list">
                 {messages.map((message) => (
-                    <li key={message.messageId}>
+                    <li key={message.messageId} className="message-item">
                         {message.sender.accountId === account.accountId ? (
                             // If the current user is the sender
-                            <p>You: {message.content}</p>
+                            <p className="sent-message">You: {message.content}</p>
                         ) : (
                             // If the current user is the receiver
                             <>
                                 {message.sender.accountType === 'INDIVIDUAL' && (
-                                    <p>{message.sender.individual.firstName}: {message.content}</p>
+                                    <p className="received-message">{message.sender.individual.firstName}: {message.content}</p>
                                     // Add more fields specific to INDIVIDUAL account type
                                 )}
                                 {message.sender.accountType === 'ORGANIZATION' && (
-                                    <p>{message.sender.organization.organizationName}: {message.content}</p>
+                                    <p className="received-message">{message.sender.organization.organizationName}: {message.content}</p>
                                     // Add more fields specific to ORGANIZATION account type
                                 )}
                             </>
@@ -76,14 +94,15 @@ const Message = () => {
             </ul>
 
             {/* Input for sending new messages */}
-            <div>
+            <div className="message-input">
                 <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type your message..."
+                    className="message-input-field"
                 />
-                <button onClick={handleSendMessage}>Send</button>
+                <button onClick={handleSendMessage} className="send-button">Send</button>
             </div>
         </div>
     );

@@ -1,0 +1,25 @@
+.standouts-container {
+    margin: 20px;
+    min-height: 80vh;
+}
+
+.standouts-header {
+    font-size: 24px;
+    color: #333;
+}
+
+.standouts-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.standouts-item {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.account-name {
+    font-weight: bold;
+}

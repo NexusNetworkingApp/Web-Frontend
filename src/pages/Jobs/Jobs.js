@@ -1,7 +1,10 @@
+// Jobs.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../../util/URL';
+import './Jobs.css'; // Import the CSS file
 
 const Jobs = () => {
     // State to store the fetched jobs
@@ -23,19 +26,20 @@ const Jobs = () => {
     }, []); // Empty dependency array ensures the effect runs only once on mount
 
     return (
-        <div>
+        <div className="jobs-container">
             <h1>Jobs</h1>
             {/* Render the list of jobs with Apply button */}
-            <ul>
+            <ul className="jobs-list">
                 {jobs.map((job) => (
-                    <li key={job.jobId}>
-                        <h3>{job.title}</h3>
-                        <p>{job.description}</p>
-                        <p>Job Type: {job.type}</p>
-                        <p>Start Date: {job.startDate}</p>
-                        <p>End Date: {job.endDate}</p>
+                    <li key={job.jobId} className="job-item">
+                        <h3 className="job-title">{job.title}</h3>
+                        <p className="job-description">{job.description}</p>
+                        <p className="job-type">Job Type: {job.type}</p>
+                        <p className="job-date">Start Date: {job.startDate}</p>
+                        <p className="job-date">End Date: {job.endDate}</p>
                         {/* Add other job details as needed */}
                         <button
+                            className="apply-button"
                             onClick={() => {
                                 // Replace 'https://example.com/apply-job' with the actual external URL
                                 window.location.href = `${job.description}`;
@@ -43,7 +47,6 @@ const Jobs = () => {
                         >
                             Apply
                         </button>
-
                     </li>
                 ))}
             </ul>

@@ -1,7 +1,10 @@
+// Discover.js
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import { API_URL } from '../../util/URL';
+import './Discover.css'; // Import the CSS file
 
 const Discover = () => {
     const [account, setAccount] = useState(null);
@@ -54,9 +57,8 @@ const Discover = () => {
                 sender: account,
                 receiver: discoverProfile,
                 likeDate: new Date(),
-                likeMessage: '',
+                likeMessage: 'Hi. Thank you for matching!',
                 prompt: 'BIOGRAPHY',
-
             };
 
             console.log("Sending like:", likeData);
@@ -65,6 +67,9 @@ const Discover = () => {
 
             console.log('Like created successfully');
             alert("Like sent!");
+
+            // Reload the page after creating a match
+            window.location.reload();
             // You can perform additional actions after a successful like creation
         } catch (error) {
             console.error('Error creating like:', error.message);
@@ -73,34 +78,35 @@ const Discover = () => {
         }
     };
 
-
-
-
     return (
-        <div>
+        <div className="discover-container">
             <h1>Discover</h1>
             {loading && <p>Loading...</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {discoverProfile && discoverProfile.accountType === "INDIVIDUAL" && (
-                <div>
-                    <p>Name: {discoverProfile.individual.firstName} {discoverProfile.individual.lastName}</p>
-                    <p>Gender: {discoverProfile.individual.gender} </p>
-                    <p>Biography: {discoverProfile.individual.biography} </p>
-                    <p>Location: {discoverProfile.individual.location} </p>
+            {error && <p className="error-message">{error}</p>}
+            {discoverProfile && (
+                <div className="profile-details">
+                    {discoverProfile.accountType === "INDIVIDUAL" && (
+                        <div>
+                            <p className="profile-info">Name: {discoverProfile.individual.firstName} {discoverProfile.individual.lastName}</p>
+                            <p className="profile-info">Gender: {discoverProfile.individual.gender} </p>
+                            <p className="profile-info">Biography: {discoverProfile.individual.biography} </p>
+                            <p className="profile-info">Location: {discoverProfile.individual.location} </p>
+                        </div>
+                    )}
+                    {discoverProfile.accountType === "ORGANIZATION" && (
+                        <div>
+                            <p className="profile-info">Organization Name: {discoverProfile.organization.organizationName}</p>
+                            <p className="profile-info">Founded Date: {discoverProfile.organization.foundedDate}</p>
+                            <p className="profile-info">Industry: {discoverProfile.organization.industry}</p>
+                            <p className="profile-info">Biography: {discoverProfile.organization.biography}</p>
+                            <p className="profile-info">Verified: {discoverProfile.organization.verified}</p>
+                            <p className="profile-info">Location: {discoverProfile.organization.location}</p>
+                        </div>
+                    )}
                 </div>
             )}
-            {discoverProfile && discoverProfile.accountType === "ORGANIZATION" && (
-                <div>
-                    <p>Organization Name: {discoverProfile.organization.organizationName}</p>
-                    <p>Founded Date: {discoverProfile.organization.foundedDate}</p>
-                    <p>Industry: {discoverProfile.organization.industry}</p>
-                    <p>Biography: {discoverProfile.organization.biography}</p>
-                    <p>Verified: {discoverProfile.organization.verified}</p>
-                    <p>Location: {discoverProfile.organization.location}</p>
-                </div>
-            )}
-            <button onClick={handleNext} disabled={loading}>Next</button>
-            <button onClick={handleLike} disabled={loading}>Like</button>
+            <button className="action-button" onClick={handleNext} disabled={loading}>Next</button>
+            <button className="action-button" onClick={handleLike} disabled={loading}>Like</button>
         </div>
     );
 };

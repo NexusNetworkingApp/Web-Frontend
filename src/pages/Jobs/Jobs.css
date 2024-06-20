@@ -1,0 +1,59 @@
+/* Jobs.css */
+
+.jobs-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    min-height: 70vh;
+    margin-bottom: 30px;
+    text-align: center;
+    margin-top: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobs-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.job-item {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.job-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.job-description {
+    margin-bottom: 15px;
+}
+
+.job-type,
+.job-date {
+    margin-bottom: 5px;
+}
+
+.apply-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #2980b9;
+}

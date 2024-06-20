@@ -1,10 +1,7 @@
-// Likes.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import { API_URL } from '../../util/URL';
-
 import './Likes.css';
 import Footer from '../../components/Footer';
 
@@ -48,6 +45,9 @@ const Likes = () => {
             await axios.post(`${API_URL}/account/create-match`, like);
 
             console.log('Match created successfully');
+
+            window.location.href = '/chat';
+
         } catch (error) {
             console.error('Error creating match:', error.message);
             console.error('Server response:', error.response?.data); // Safely access response data
@@ -56,35 +56,34 @@ const Likes = () => {
     };
 
     return (
-        <div>
+        <div className="likes-container">
             <h1>Likes</h1>
 
             {loading && <p>Loading...</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
             {/* Render the list of likes */}
-            {likes.length > 0 && (
-                <ul>
+            {likes.length > 0 ? (
+                <ul className="likes-list">
                     {likes.map((like) => (
-                        <li key={like.likeId}>
+                        <li key={like.likeId} className="like-item">
                             {/* Display other information about the like */}
                             {/* For example: like.likeMessage, like.likeDate, etc. */}
-                            <p>Message: {like.likeMessage}</p>
                             {/* Extract specific properties from like.sender */}
                             {like.sender && (
                                 <>
-                                    <p>Sender ID: {like.sender.accountId}</p>
-                                    <p>Sender Type: {like.sender.accountType}</p>
                                     {/* Further subdivide based on accountType */}
                                     {like.sender.accountType === 'INDIVIDUAL' && (
                                         <>
                                             <p>Sender Name: {like.sender.individual.firstName} {like.sender.individual.lastName}</p>
+                                            <p>Biography: {like.sender.individual.biography}</p>
                                             {/* Add more fields specific to INDIVIDUAL account type */}
                                         </>
                                     )}
                                     {like.sender.accountType === 'ORGANIZATION' && (
                                         <>
                                             <p>Organization Name: {like.sender.organization.organizationName}</p>
+                                            <p>Biography: {like.sender.organization.biography}</p>
                                             {/* Add more fields specific to ORGANIZATION account type */}
                                         </>
                                     )}
@@ -95,7 +94,11 @@ const Likes = () => {
                         </li>
                     ))}
                 </ul>
+            ) : (
+                <p>There are currently no likes.</p>
             )}
+
+            {/* ... (rest of the component, if any) */}
 
         </div>
     );

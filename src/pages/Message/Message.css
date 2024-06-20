@@ -1,0 +1,70 @@
+/* Message.css */
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    min-height: 70vh;
+    background-color: #f8f8f8; /* Add a background color */
+    padding: 20px; /* Add some padding for space between messages and the boundary */
+    border-radius: 10px; /* Add rounded corners for a softer appearance */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+
+}
+
+.message-list {
+    list-style: none;
+    padding: 0;
+}
+
+.message-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.sent-message,
+.received-message {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 8px;
+    word-wrap: break-word;
+}
+
+.sent-message {
+    background-color: #3498db;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.received-message {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.message-input {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.message-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.message-input button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+

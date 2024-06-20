@@ -1,67 +1,84 @@
-import './Profile.css';
 import React, { useEffect, useState } from 'react';
+import { Container, Box, Typography, Grid, Paper, Avatar } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from '../../components/Footer';
-import {Link} from "react-router-dom";
+import './Profile.css';
+
+const theme = createTheme();
 
 const Profile = () => {
     const [account, setAccount] = useState(null);
 
     useEffect(() => {
-        // Retrieve account information from local storage
         const storedAccount = JSON.parse(localStorage.getItem('account'));
         setAccount(storedAccount);
     }, []);
 
     if (!account) {
-        // Handle the case where account information is not available (perhaps user is not logged in)
         return (
-            <div>
-                <h1>Profile</h1>
-                <p>No account information available. Please log in.</p>
-            </div>
+            <Container component="main" maxWidth="md">
+                <Box mt={4}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Profile
+                    </Typography>
+                    <Typography variant="body1">
+                        No account information available. Please log in.
+                    </Typography>
+                </Box>
+            </Container>
         );
     }
 
     return (
-        <div>
-            <h1>Profile</h1>
-            {account.accountType === 'INDIVIDUAL' ? (
-                // Render content for individual account
-                <div>
-                    <p>Name: {account.individual.firstName} {account.individual.lastName}</p>
-                    <p>Email: {account.individual.email}</p>
-                    <p>Gender: {account.individual.gender}</p>
-                    <p>Receive Notifications: {account.individual.receiveNotifications}</p>
-                    <p>Biography: {account.individual.biography}</p>
-                    <p>Zip Code: {account.individual.location}</p>
-                    {/* Add other individual-specific parameters */}
-                </div>
-            ) : account.accountType === 'ORGANIZATION' ? (
-                // Render content for organization account
-                <div>
-                    <p>Organization Name: {account.organization.organizationName}</p>
-                    <p>Email: {account.organization.email}</p>
-                    <p>Found date: {account.organization.foundedDate}</p>
-                    <p>Industry: {account.organization.industry}</p>
-                    <p>Receive Notifications: {account.organization.receiveNotifications}</p>
-                    <p>Biography: {account.organization.biography}</p>
-                    <p>verified: {account.organization.verified}</p>
-                    <p>Zip Code: {account.organization.location}</p>
-
-                    {/* Job Posting Link */}
-                    <div>
-                        <h3>Job Posting</h3>
-                        <p>
-                            Interested in posting a job?{' '}
-                            <Link to="/post-job">Click here</Link> to post a new job.
-                        </p>
-                    </div>
-                </div>
-            ) : (
-                // Handle unknown account type or other cases
-                <p>Unsupported account type</p>
-            )}
-        </div>
+        <ThemeProvider theme={theme}>
+            <Container component="main" maxWidth="md">
+                <Box mt={4} mb={4}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        Profile
+                    </Typography>
+                    <Paper elevation={3} className="profile-paper">
+                        <Box p={2}>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item>
+                                    <Avatar
+                                        alt="Profile Picture"
+                                        src={account.pictureUrl || '/default-profile.png'}
+                                        sx={{ width: 100, height: 100 }}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="h6">
+                                        {account.accountType === 'INDIVIDUAL'
+                                            ? `${account.individual.firstName} ${account.individual.lastName}`
+                                            : account.organization.organizationName}
+                                    </Typography>
+                                    <Typography variant="body1" color="textSecondary">
+                                        {account.email}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Box mt={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="body1"><strong>Gender:</strong> {account.individual?.gender}</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="body1"><strong>Notifications:</strong> {account.individual?.receiveNotifications ? 'Yes' : 'No'}</Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body1"><strong>Biography:</strong> {account.biography}</Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography variant="body1"><strong>Location:</strong> {account.location}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Paper>
+                </Box>
+                <Footer />
+            </Container>
+        </ThemeProvider>
     );
 };
 
