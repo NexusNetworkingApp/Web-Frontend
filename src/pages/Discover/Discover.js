@@ -23,15 +23,14 @@ const Discover = () => {
         setError(null);
 
         try {
-            if (account && account.accountType === 'INDIVIDUAL') {
-                const response = await axios.get(`${API_URL}/account/individual-discover/${account.accountId}`);
-                const returnedAccount = response.data;
-                setDiscoverProfile(returnedAccount);
 
-            } else if (account && account.accountType === 'ORGANIZATION') {
-                const response = await axios.get(`${API_URL}/account/organization-discover`);
-                const returnedAccount = response.data;
-                setDiscoverProfile(returnedAccount);
+            if (account) {
+
+                const response = account.accountType === 'INDIVIDUAL' 
+                ? await axios.get(`${API_URL}/account/individual-discover/${account.accountId}`)
+                : await axios.get(`${API_URL}/account/organization-discover`);
+                
+                setDiscoverProfile(response.data);
             }
         } catch (error) {
             console.error('Error fetching discover profile:', error.message);
@@ -66,11 +65,8 @@ const Discover = () => {
             await axios.post(`${API_URL}/account/create-like`, likeData);
 
             console.log('Like created successfully');
-            alert("Like sent!");
 
-            // Reload the page after creating a match
-            window.location.reload();
-            // You can perform additional actions after a successful like creation
+            fetchData();
         } catch (error) {
             console.error('Error creating like:', error.message);
             console.error('Server response:', error.response?.data); // Safely access response data

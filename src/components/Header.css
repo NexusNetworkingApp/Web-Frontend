@@ -25,6 +25,7 @@ html, body {
 .header a {
     text-decoration: none;
     color: inherit; /* Inherit color from the parent */
+    margin: 7px;
 }
 
 .header h1 {
