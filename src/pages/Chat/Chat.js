@@ -27,7 +27,7 @@ const Chat = () => {
             try {
                 // Ensure that 'account' is not null before making the request
                 if (account) {
-                    const response = await axios.get(`${API_URL}/account/fetch-matches/${account.accountId}`);
+                    const response = await axios.get(`${API_URL}/match/fetch-matches/${account.accountId}`);
                     setMatches(response.data);
                 }
             } catch (error) {

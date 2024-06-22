@@ -24,7 +24,7 @@ const Likes = () => {
             try {
                 // Ensure that 'account' is not null before making the request
                 if (account) {
-                    const response = await axios.get(`${API_URL}/account/fetch-likes/${account.accountId}`);
+                    const response = await axios.get(`${API_URL}/match/fetch-likes/${account.accountId}`);
                     setLikes(response.data);
                 }
             } catch (error) {
@@ -42,7 +42,7 @@ const Likes = () => {
     const handleMatch = async (like) => {
         try {
             // Send a request to create a match
-            await axios.post(`${API_URL}/account/create-match`, like);
+            await axios.post(`${API_URL}/match/create-match`, like);
 
             console.log('Match created successfully');
 

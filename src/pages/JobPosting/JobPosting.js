@@ -38,7 +38,7 @@ const JobPosting = () => {
                     organization: account.organization,
                 }));
 
-                await axios.post(`${API_URL}/account/organization/post-job`, jobData);
+                await axios.post(`${API_URL}/job/organization/post-job`, jobData);
                 console.log('Job posted successfully!');
             } else {
                 console.error('Error posting job: Organization not available');

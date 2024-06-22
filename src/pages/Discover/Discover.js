@@ -62,7 +62,7 @@ const Discover = () => {
 
             console.log("Sending like:", likeData);
 
-            await axios.post(`${API_URL}/account/create-like`, likeData);
+            await axios.post(`${API_URL}/match/create-like`, likeData);
 
             console.log('Like created successfully');
 

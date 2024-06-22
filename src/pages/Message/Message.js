@@ -21,7 +21,7 @@ const Message = () => {
 
     const fetchMessages = async () => {
         try {
-            const response = await axios.get(`${API_URL}/account/messages/${accountId}/${otherAccountId}`);
+            const response = await axios.get(`${API_URL}/messages/${accountId}/${otherAccountId}`);
             setMessages(response.data);
         } catch (error) {
             console.error('Error fetching messages:', error.message);
@@ -49,7 +49,7 @@ const Message = () => {
         try {
             // Send the new message using RESTful API with path variables
             await axios.post(
-                `${API_URL}/account/message/send/${accountId}/${otherAccountId}/${newMessage}`,
+                `${API_URL}/message/send/${accountId}/${otherAccountId}/${newMessage}`,
             );
 
             // Fetch updated messages after sending a new message

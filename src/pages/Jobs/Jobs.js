@@ -14,7 +14,7 @@ const Jobs = () => {
         // Fetch all jobs from the server
         const fetchJobs = async () => {
             try {
-                const response = await axios.get(`${API_URL}/account/all-jobs`);
+                const response = await axios.get(`${API_URL}/job/all-jobs`);
                 setJobs(response.data);
             } catch (error) {
                 console.error('Error fetching jobs:', error.message);
