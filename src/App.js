@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './AuthContext';
 import Header from './components/Header';
@@ -20,58 +20,66 @@ function App() {
     const { isLoggedIn } = useAuth();
 
     return (
-        <AuthProvider>
-            <Router>
-                <Header />
-                <Routes>
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/"
-                        element={isLoggedIn ? <Discover /> : <Navigate to="/" />}
-                    />
-                    <Route
-                        path="/chat"
-                        element={isLoggedIn ? <Chat /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/discover"
-                        element={isLoggedIn ? <Discover /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/jobs"
-                        element={isLoggedIn ? <Jobs /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/likes"
-                        element={isLoggedIn ? <Likes /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/profile"
-                        element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/standouts"
-                        element={isLoggedIn ? <Standouts /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/message/:accountId/:otherAccountId"
-                        element={isLoggedIn ? <Message /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/post-job"
-                        element={isLoggedIn ? <JobPosting /> : <Navigate to="/login" />}
-                    />
-                    <Route
-                        path="/apply-job/:jobId"
-                        element={isLoggedIn ? <JobApplication /> : <Navigate to="/login" />}
-                    />
+        <Router>
+            <Header />
+            <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
 
-                </Routes>
-                <Footer />
-            </Router>
+                {/* Protected routes */}
+                <Route 
+                    path="/discover" 
+                    element={isLoggedIn ? <Discover /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/chat" 
+                    element={isLoggedIn ? <Chat /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/jobs" 
+                    element={isLoggedIn ? <Jobs /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/likes" 
+                    element={isLoggedIn ? <Likes /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/profile" 
+                    element={isLoggedIn ? <Profile /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/standouts" 
+                    element={isLoggedIn ? <Standouts /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/message/:accountId/:otherAccountId" 
+                    element={isLoggedIn ? <Message /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/post-job" 
+                    element={isLoggedIn ? <JobPosting /> : <Navigate to="/login" />} 
+                />
+                <Route 
+                    path="/apply-job/:jobId" 
+                    element={isLoggedIn ? <JobApplication /> : <Navigate to="/login" />} 
+                />
+
+                {/* Redirect to home for any undefined routes */}
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+            <Footer />
+        </Router>
+    );
+}
+
+function AppWrapper() {
+    return (
+        <AuthProvider>
+            <App />
         </AuthProvider>
     );
 }
 
-export default App;
+export default AppWrapper;

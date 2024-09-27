@@ -107,32 +107,39 @@ const Discover = () => {
             </div>
             {loading && <p>Loading...</p>}
             {error && <p className="error-message">{error}</p>}
-            {discoverProfile ? (
-                <div className="profile-details">
-                    {discoverProfile.accountType === "INDIVIDUAL" && (
-                        <div>
-                            <p className="profile-info">Name: {discoverProfile.individual.firstName} {discoverProfile.individual.lastName}</p>
-                            <p className="profile-info">Gender: {discoverProfile.individual.gender} </p>
-                            <p className="profile-info">Biography: {discoverProfile.individual.biography} </p>
-                            <p className="profile-info">Location: {discoverProfile.individual.location} </p>
-                        </div>
-                    )}
-                    {discoverProfile.accountType === "ORGANIZATION" && (
-                        <div>
-                            <p className="profile-info">Organization Name: {discoverProfile.organization.organizationName}</p>
-                            <p className="profile-info">Founded Date: {discoverProfile.organization.foundedDate}</p>
-                            <p className="profile-info">Industry: {discoverProfile.organization.industry}</p>
-                            <p className="profile-info">Biography: {discoverProfile.organization.biography}</p>
-                            <p className="profile-info">Verified: {discoverProfile.organization.verified}</p>
-                            <p className="profile-info">Location: {discoverProfile.organization.location}</p>
-                        </div>
+            {discoverProfile && (
+                <div className="profile-card">
+                    <div className="profile-picture">
+                        {discoverProfile.accountType === "INDIVIDUAL" 
+                            ? discoverProfile.individual.firstName[0] 
+                            : discoverProfile.organization.organizationName[0]}
+                    </div>
+                    {discoverProfile.accountType === "INDIVIDUAL" ? (
+                        <>
+                            <p className="profile-info"><strong>Name:</strong> {discoverProfile.individual.firstName} {discoverProfile.individual.lastName}</p>
+                            <p className="profile-info"><strong>Gender:</strong> {discoverProfile.individual.gender}</p>
+                            <p className="profile-info"><strong>Biography:</strong> {discoverProfile.individual.biography}</p>
+                            <p className="profile-info"><strong>Location:</strong> {discoverProfile.individual.location}</p>
+                        </>
+                    ) : (
+                        <>
+                            <p className="profile-info"><strong>Organization:</strong> {discoverProfile.organization.organizationName}</p>
+                            <p className="profile-info"><strong>Founded:</strong> {discoverProfile.organization.foundedDate}</p>
+                            <p className="profile-info"><strong>Industry:</strong> {discoverProfile.organization.industry}</p>
+                            <p className="profile-info"><strong>Biography:</strong> {discoverProfile.organization.biography}</p>
+                            <p className="profile-info"><strong>Verified:</strong> {discoverProfile.organization.verified ? 'Yes' : 'No'}</p>
+                            <p className="profile-info"><strong>Location:</strong> {discoverProfile.organization.location}</p>
+                        </>
                     )}
                 </div>
-            ) : (
-                !loading && <p>No matching candidates found. Please try adjusting the range.</p>
             )}
-            <button className="action-button" onClick={handleNext} disabled={loading}>Next</button>
-            <button className="action-button" onClick={handleLike} disabled={loading || !discoverProfile}>Like</button>
+            {!loading && !discoverProfile && (
+                <p>No matching candidates found. Please try adjusting the range.</p>
+            )}
+            <div className="action-buttons">
+                <button className="action-button" onClick={handleNext} disabled={loading}>Next</button>
+                <button className="action-button" onClick={handleLike} disabled={loading || !discoverProfile}>Like</button>
+            </div>
         </div>
     );
 };

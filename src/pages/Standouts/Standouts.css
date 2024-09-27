@@ -1,25 +1,98 @@
 .standouts-container {
-    margin: 20px;
-    min-height: 80vh;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
 }
 
 .standouts-header {
+    font-size: 36px;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.standouts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.standout-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.standout-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.standout-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #3498db;
+    color: #ffffff;
     font-size: 24px;
-    color: #333;
-}
-
-.standouts-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.standouts-item {
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-
-.account-name {
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+}
+
+.standout-name {
+    font-size: 24px;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.standout-bio {
+    font-size: 16px;
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.standout-details {
+    border-top: 1px solid #ecf0f1;
+    padding-top: 15px;
+}
+
+.standout-details p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.standouts-loading,
+.standouts-error {
+    text-align: center;
+    font-size: 18px;
+    color: #34495e;
+    margin-top: 40px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.standout-card {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+    .standouts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .standouts-header {
+        font-size: 28px;
+    }
 }

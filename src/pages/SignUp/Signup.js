@@ -1,357 +1,184 @@
-// Signup.js
-import * as React from 'react';
-import { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import { MenuItem } from '@mui/material';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
+import './Signup.css';
 
-const defaultTheme = createTheme();
+const Signup = () => {
+    const [userType, setUserType] = useState('individual');
+    const [formData, setFormData] = useState({
+        email: '',
+        passwordHash: '',
+        firstName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        receiveNotifications: false,
+        biography: '',
+        organizationName: '',
+        foundedDate: '',
+        industry: '',
+        verified: false,
+        location: '',
+    });
+    const [error, setError] = useState('');
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+    };
 
-export default function SignUp() {
-  const [userType, setUserType] = useState('individual');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
 
-  const [individualFormData, setIndividualFormData] = useState({
-    email: '',
-    passwordHash: '',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    gender: '',
-    receiveNotifications: false,
-    biography: '',
-    lastActive: new Date().toISOString(),
-    location: 0,
-  });
+        try {
+            const endpoint = userType === 'individual' 
+                ? `${API_URL}/account/create-individual`
+                : `${API_URL}/account/create-organization`;
+            
+            const response = await axios.post(endpoint, formData);
+            console.log('Signup successful:', response.data);
+            // Redirect to login or show success message
+        } catch (error) {
+            setError('Signup failed. Please try again.');
+            console.error('Signup error:', error.message);
+        }
+    };
 
-  const [organizationFormData, setOrganizationFormData] = useState({
-    email: '',
-    passwordHash: '',
-    organizationName: '',
-    foundedDate: '',
-    industry: '',
-    receiveNotifications: false,
-    biography: '',
-    lastActive: new Date().toISOString(),
-    verified: false,
-    location: 0,
-  });
-
-  const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const formData = userType === 'individual' ? setIndividualFormData : setOrganizationFormData;
-
-    formData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const userData = userType === 'individual' ? individualFormData : organizationFormData;
-
-    try {
-      let response;
-      if (userType === 'individual') {
-        response = await axios.post(`${API_URL}/account/create-individual`, userData);
-      } else if (userType === 'organization') {
-        response = await axios.post(`${API_URL}/account/create-organization`, userData);
-      }
-      console.log('API Response:', response.data);
-    } catch (error) {
-      console.error('API Error:', error.message);
-    }
-  };
-
-  return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id="account-type-label">Account Type</InputLabel>
-                  <Select
-                    labelId="account-type-label"
-                    id="account-type"
+    return (
+        <div className="auth-container">
+            <h1>Sign Up</h1>
+            <form onSubmit={handleSubmit} className="auth-form">
+                <select
                     value={userType}
-                    label="Account Type"
-                    onChange={handleUserTypeChange}
-                  >
-                    <MenuItem value="individual">Individual</MenuItem>
-                    <MenuItem value="business">Business</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  value={userType === 'individual' ? individualFormData.email : organizationFormData.email}
-                  onChange={handleChange}
+                    onChange={(e) => setUserType(e.target.value)}
+                    className="auth-input"
+                >
+                    <option value="individual">Individual</option>
+                    <option value="organization">Organization</option>
+                </select>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="auth-input"
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="passwordHash"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={userType === 'individual' ? individualFormData.passwordHash : organizationFormData.passwordHash}
-                  onChange={handleChange}
+                <input
+                    type="password"
+                    name="passwordHash"
+                    placeholder="Password"
+                    value={formData.passwordHash}
+                    onChange={handleChange}
+                    required
+                    className="auth-input"
                 />
-              </Grid>
-
-              {userType === 'individual' && (
-                <>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="firstName"
-                      required
-                      fullWidth
-                      id="firstName"
-                      label="First Name"
-                      value={individualFormData.firstName}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="family-name"
-                      value={individualFormData.lastName}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="dateOfBirth"
-                      label="Date of Birth"
-                      name="dateOfBirth"
-                      type="date"
-                      InputLabelProps={{ shrink: true }}
-                      value={individualFormData.dateOfBirth}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="gender"
-                      label="Gender"
-                      name="gender"
-                      value={individualFormData.gender}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="biography"
-                      label="Biography"
-                      name="biography"
-                      multiline
-                      rows={4}
-                      value={individualFormData.biography}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="location"
-                      label="Location"
-                      name="location"
-                      value={individualFormData.location}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="receiveNotifications"
-                          checked={individualFormData.receiveNotifications}
-                          onChange={handleChange}
-                          color="primary"
+                {userType === 'individual' ? (
+                    <>
+                        <input
+                            type="text"
+                            name="firstName"
+                            placeholder="First Name"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            required
+                            className="auth-input"
                         />
-                      }
-                      label="Receive Notifications"
-                    />
-                  </Grid>
-                </>
-              )}
-
-              {userType === 'organization' && (
-                <>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="organizationName"
-                      label="Organization Name"
-                      name="organizationName"
-                      value={organizationFormData.organizationName}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="foundedDate"
-                      label="Founded Date"
-                      name="foundedDate"
-                      type="date"
-                      InputLabelProps={{ shrink: true }}
-                      value={organizationFormData.foundedDate}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="industry"
-                      label="Industry"
-                      name="industry"
-                      value={organizationFormData.industry}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="biography"
-                      label="Biography"
-                      name="biography"
-                      multiline
-                      rows={4}
-                      value={organizationFormData.biography}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      id="location"
-                      label="Location"
-                      name="location"
-                      value={organizationFormData.location}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="receiveNotifications"
-                          checked={organizationFormData.receiveNotifications}
-                          onChange={handleChange}
-                          color="primary"
+                        <input
+                            type="text"
+                            name="lastName"
+                            placeholder="Last Name"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            required
+                            className="auth-input"
                         />
-                      }
-                      label="Receive Notifications"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          name="verified"
-                          checked={organizationFormData.verified}
-                          onChange={handleChange}
-                          color="primary"
+                        <input
+                            type="date"
+                            name="dateOfBirth"
+                            value={formData.dateOfBirth}
+                            onChange={handleChange}
+                            required
+                            className="auth-input"
                         />
-                      }
-                      label="Verified"
+                        <input
+                            type="text"
+                            name="gender"
+                            placeholder="Gender"
+                            value={formData.gender}
+                            onChange={handleChange}
+                            className="auth-input"
+                        />
+                    </>
+                ) : (
+                    <>
+                        <input
+                            type="text"
+                            name="organizationName"
+                            placeholder="Organization Name"
+                            value={formData.organizationName}
+                            onChange={handleChange}
+                            required
+                            className="auth-input"
+                        />
+                        <input
+                            type="date"
+                            name="foundedDate"
+                            value={formData.foundedDate}
+                            onChange={handleChange}
+                            required
+                            className="auth-input"
+                        />
+                        <input
+                            type="text"
+                            name="industry"
+                            placeholder="Industry"
+                            value={formData.industry}
+                            onChange={handleChange}
+                            className="auth-input"
+                        />
+                    </>
+                )}
+                <textarea
+                    name="biography"
+                    placeholder="Biography"
+                    value={formData.biography}
+                    onChange={handleChange}
+                    className="auth-input"
+                    rows="4"
+                />
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    required
+                    className="auth-input"
+                />
+                <label className="auth-checkbox">
+                    <input
+                        type="checkbox"
+                        name="receiveNotifications"
+                        checked={formData.receiveNotifications}
+                        onChange={handleChange}
                     />
-                  </Grid>
-                </>
-              )}
+                    Receive Notifications
+                </label>
+                {error && <p className="auth-error">{error}</p>}
+                <button type="submit" className="auth-button">Sign Up</button>
+            </form>
+            <p className="auth-link">
+                Already have an account? <Link to="/login">Sign In</Link>
+            </p>
+        </div>
+    );
+};
 
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-    </ThemeProvider>
-  );
-}
+export default Signup;

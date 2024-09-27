@@ -1,5 +1,80 @@
-/* Profile.css */
+.profile-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.profile-header {
+    margin-bottom: 24px;
+    color: #2c3e50;
+}
+
 .profile-paper {
-    margin-bottom: 20px;
-    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.profile-paper:hover {
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+}
+
+.profile-header-section {
+    background-color: #f8f9fa;
+    padding: 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-avatar {
+    width: 120px !important;
+    height: 120px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-name {
+    margin-bottom: 8px;
+    color: #2c3e50;
+}
+
+.profile-email {
+    color: #7f8c8d;
+}
+
+.profile-field {
+    margin-bottom: 16px;
+}
+
+.profile-field-label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #34495e;
+}
+
+.profile-field-value {
+    color: #2c3e50;
+}
+
+.no-account-message {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+    .profile-avatar {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .profile-name {
+        font-size: 1.5rem;
+    }
+
+    .profile-email {
+        font-size: 0.9rem;
+    }
 }

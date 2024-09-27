@@ -1,44 +1,82 @@
-/* Signup.css */
-
-.signup-container {
+.auth-container {
     max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.auth-container h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
 
-.signup-form {
+.auth-form {
     display: flex;
     flex-direction: column;
 }
 
-.signup-form label {
-    margin-bottom: 10px;
-}
-
-.signup-form input,
-.signup-form select,
-.signup-form textarea {
-    padding: 10px;
+.auth-input {
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
     border-radius: 5px;
+    font-size: 16px;
 }
 
-.signup-form button {
-    background-color: #4caf50;
+.auth-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.auth-button {
+    background-color: #3498db;
     color: white;
     padding: 12px;
     border: none;
     border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.signup-form button:hover {
-    background-color: #45a049;
+.auth-button:hover {
+    background-color: #2980b9;
 }
 
-/* Add additional styling as needed */
+.auth-error {
+    color: #e74c3c;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-link a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.auth-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.auth-checkbox input {
+    margin-right: 10px;
+}
+
+textarea.auth-input {
+    resize: vertical;
+    min-height: 100px;
+}

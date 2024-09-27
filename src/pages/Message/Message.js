@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './Message.css';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
@@ -13,9 +13,10 @@ const Message = () => {
     const [account, setAccount] = useState(null);
     const [otherUserName, setOtherUserName] = useState('');
     const stompClientRef = useRef(null);
+    const messagesEndRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Retrieve account information from local storage
         const storedAccount = JSON.parse(localStorage.getItem('account'));
         setAccount(storedAccount);
     }, [accountId]);
@@ -29,11 +30,12 @@ const Message = () => {
         }
     };
 
-    useEffect(() => {
-        // Fetch initial messages using RESTful API
-        fetchMessages();
+    const handleBackClick = () => {
+        navigate('/chat');
+    };
 
-        // Fetch the other user's name for the header
+    useEffect(() => {
+        fetchMessages();
         const fetchOtherUserName = async () => {
             try {
                 const response = await axios.get(`${API_URL}/account/get-user-name/${otherAccountId}`);
@@ -42,7 +44,6 @@ const Message = () => {
                 console.error('Error fetching other user name:', error.message);
             }
         };
-
         fetchOtherUserName();
     }, [accountId, otherAccountId]);
 
@@ -71,21 +72,21 @@ const Message = () => {
     }, [accountId, otherAccountId]);
 
     const handleSendMessage = () => {
+        if (!newMessage.trim()) return;
+
         const message = {
             sender: { accountId },
             receiver: { accountId: otherAccountId },
             content: newMessage,
         };
 
-        // Send message through WebSocket
         stompClientRef.current.send('/app/sendMessage', {}, JSON.stringify(message));
 
-        // Update local state to show the new message immediately
         setMessages((prevMessages) => [
             ...prevMessages,
             {
                 ...message,
-                messageId: Date.now(), // Temporary ID until the actual ID is received
+                messageId: Date.now(),
                 sender: { accountId, accountType: account.accountType, individual: account.individual, organization: account.organization }
             },
         ]);
@@ -93,47 +94,40 @@ const Message = () => {
         setNewMessage('');
     };
 
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
     return (
         <div className="message-container">
-            {/* Display other user's name as a header */}
-            {otherUserName && (
-                <h2 className="other-user-header">{otherUserName}</h2>
-            )}
-
-            {/* Render messages */}
+            <div className="message-header">
+                <button onClick={handleBackClick} className="back-button">Back to Chat</button>
+                <h2>{otherUserName}</h2>
+            </div>
             <ul className="message-list">
                 {messages.map((message) => (
-                    <li key={message.messageId} className="message-item">
-                        {message.sender.accountId === account.accountId ? (
-                            // If the current user is the sender
-                            <p className="sent-message">You: {message.content}</p>
-                        ) : (
-                            // If the current user is the receiver
-                            <>
-                                {message.sender.accountType === 'INDIVIDUAL' && (
-                                    <p className="received-message">{message.sender.individual.firstName}: {message.content}</p>
-                                    // Add more fields specific to INDIVIDUAL account type
-                                )}
-                                {message.sender.accountType === 'ORGANIZATION' && (
-                                    <p className="received-message">{message.sender.organization.organizationName}: {message.content}</p>
-                                    // Add more fields specific to ORGANIZATION account type
-                                )}
-                            </>
-                        )}
+                    <li key={message.messageId} className={`message-item ${message.sender.accountId === account.accountId ? 'sent' : 'received'}`}>
+                        <div className="message-bubble">
+                            {message.sender.accountId !== account.accountId && (
+                                <div className="message-sender">
+                                    {message.sender.accountType === 'INDIVIDUAL' ? message.sender.individual.firstName : message.sender.organization.organizationName}
+                                </div>
+                            )}
+                            <p>{message.content}</p>
+                        </div>
                     </li>
                 ))}
+                <div ref={messagesEndRef} />
             </ul>
-
-            {/* Input for sending new messages */}
             <div className="message-input">
                 <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="Type your message..."
-                    className="message-input-field"
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 />
-                <button onClick={handleSendMessage} className="send-button">Send</button>
+                <button onClick={handleSendMessage}>Send</button>
             </div>
         </div>
     );
