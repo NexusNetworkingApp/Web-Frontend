@@ -80,7 +80,7 @@ const Login = () => {
                                 onChange={handleAccountTypeChange}
                             >
                                 <MenuItem value="individual">Individual</MenuItem>
-                                <MenuItem value="business">Business</MenuItem>
+                                <MenuItem value="organization">Organization</MenuItem>
                             </Select>
                         </FormControl>
                         <TextField

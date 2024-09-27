@@ -1,5 +1,3 @@
-/* Chat.css */
-
 .chat-container {
     max-width: 800px;
     margin: 0 auto;
@@ -21,9 +19,7 @@
 .match-link {
     display: block;
     text-decoration: none;
-    color: inherit; /* Preserve the link text color */
-
-    /* Additional styles for the link */
+    color: inherit;
     border: 2px solid #ccc;
     border-radius: 8px;
     margin-bottom: 10px;
@@ -32,10 +28,29 @@
 }
 
 .match-link:hover {
-    background-color: #f0f0f0; /* Change the background color on hover */
-    transform: scale(1.02); /* Add a slight scale effect on hover */
+    background-color: #f0f0f0;
+    transform: scale(1.02);
 }
 
 .match-item {
-    /* Your existing styles for match-item */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.user-name, .organization-name {
+    font-size: 1.2em;
+    margin: 5px 0;
+    color: #333;
+}
+
+.match-date {
+    font-size: 0.9em;
+    color: #888;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
 }

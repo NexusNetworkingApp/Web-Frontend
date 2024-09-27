@@ -69,7 +69,9 @@ const Profile = () => {
                                         <Typography variant="body1"><strong>Biography:</strong> {account.biography}</Typography>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Typography variant="body1"><strong>Location:</strong> {account.location}</Typography>
+                                        <Typography variant="body1"><strong>Location:</strong> {account.accountType === 'INDIVIDUAL'
+                                            ? account.individual.location
+                                            : account.organization.location}</Typography>
                                     </Grid>
                                 </Grid>
                             </Box>

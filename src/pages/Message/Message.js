@@ -1,10 +1,10 @@
-// Message.js
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../util/URL';
 import { useParams } from 'react-router-dom';
-import './Message.css'; // Import the CSS file
+import './Message.css';
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 const Message = () => {
     const { accountId, otherAccountId } = useParams();
@@ -12,6 +12,7 @@ const Message = () => {
     const [newMessage, setNewMessage] = useState('');
     const [account, setAccount] = useState(null);
     const [otherUserName, setOtherUserName] = useState('');
+    const stompClientRef = useRef(null);
 
     useEffect(() => {
         // Retrieve account information from local storage
@@ -45,20 +46,50 @@ const Message = () => {
         fetchOtherUserName();
     }, [accountId, otherAccountId]);
 
-    const handleSendMessage = async () => {
-        try {
-            // Send the new message using RESTful API with path variables
-            await axios.post(
-                `${API_URL}/message/send/${accountId}/${otherAccountId}/${newMessage}`,
-            );
+    useEffect(() => {
+        const socket = new SockJS(`${API_URL}/ws`);
+        const stompClient = Stomp.over(socket);
+        stompClientRef.current = stompClient;
 
-            // Fetch updated messages after sending a new message
-            await fetchMessages();
-        } catch (error) {
-            console.error('Error sending or fetching messages:', error.message);
-        }
+        stompClient.connect({}, () => {
+            console.log('Connected to WebSocket');
+            stompClient.subscribe(`/user/${accountId}/queue/messages`, (message) => {
+                const receivedMessage = JSON.parse(message.body);
+                setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+            });
+        }, (error) => {
+            console.error('Error connecting to WebSocket:', error);
+        });
 
-        // Clear the new message input
+        return () => {
+            if (stompClientRef.current) {
+                stompClientRef.current.disconnect(() => {
+                    console.log('Disconnected from WebSocket');
+                });
+            }
+        };
+    }, [accountId, otherAccountId]);
+
+    const handleSendMessage = () => {
+        const message = {
+            sender: { accountId },
+            receiver: { accountId: otherAccountId },
+            content: newMessage,
+        };
+
+        // Send message through WebSocket
+        stompClientRef.current.send('/app/sendMessage', {}, JSON.stringify(message));
+
+        // Update local state to show the new message immediately
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            {
+                ...message,
+                messageId: Date.now(), // Temporary ID until the actual ID is received
+                sender: { accountId, accountType: account.accountType, individual: account.individual, organization: account.organization }
+            },
+        ]);
+
         setNewMessage('');
     };
 

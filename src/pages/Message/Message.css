@@ -1,5 +1,4 @@
 /* Message.css */
-
 .message-container {
     display: flex;
     flex-direction: column;
@@ -8,11 +7,10 @@
     margin-top: 30px;
     margin-bottom: 30px;
     min-height: 70vh;
-    background-color: #f8f8f8; /* Add a background color */
-    padding: 20px; /* Add some padding for space between messages and the boundary */
-    border-radius: 10px; /* Add rounded corners for a softer appearance */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .message-list {
@@ -67,4 +65,3 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
